@@ -1,0 +1,68 @@
+[
+  {
+    "customer_name": "Avery Cole",
+    "email": "avery.cole@example.com",
+    "region": "North America",
+    "account_status": "Active",
+    "image_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&q=80",
+    "lifetime_value": 126500,
+    "tickets_open": 1,
+    "signup_date": "2025-01-14",
+    "preferred_plan": "Enterprise"
+  },
+  {
+    "customer_name": "Lina Haddad",
+    "email": "lina.haddad@example.com",
+    "region": "Middle East",
+    "account_status": "Trial",
+    "image_url": "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=80&q=80",
+    "lifetime_value": 18400,
+    "tickets_open": 4,
+    "signup_date": "2025-02-03",
+    "preferred_plan": "Growth"
+  },
+  {
+    "customer_name": "Noah Bennett",
+    "email": "noah.bennett@example.com",
+    "region": "Europe",
+    "account_status": "Active",
+    "image_url": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=80&q=80",
+    "lifetime_value": 74200,
+    "tickets_open": 0,
+    "signup_date": "2024-11-28",
+    "preferred_plan": "Scale"
+  },
+  {
+    "customer_name": "Priya Raman",
+    "email": "priya.raman@example.com",
+    "region": "Asia Pacific",
+    "account_status": "At Risk",
+    "image_url": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=80&q=80",
+    "lifetime_value": 45110,
+    "tickets_open": 7,
+    "signup_date": "2024-10-19",
+    "preferred_plan": "Growth"
+  },
+  {
+    "customer_name": "Marco Silva",
+    "email": "marco.silva@example.com",
+    "region": "South America",
+    "account_status": "Active",
+    "image_url": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=80&q=80",
+    "lifetime_value": 98230,
+    "tickets_open": 2,
+    "signup_date": "2025-03-22",
+    "preferred_plan": "Enterprise"
+  },
+  {
+    "customer_name": "Nadia Foster",
+    "email": "nadia.foster@example.com",
+    "region": "Africa",
+    "account_status": "Paused",
+    "image_url": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=80&q=80",
+    "lifetime_value": 21300,
+    "tickets_open": 5,
+    "signup_date": "2024-12-07",
+    "preferred_plan": "Starter"
+  }
+]
