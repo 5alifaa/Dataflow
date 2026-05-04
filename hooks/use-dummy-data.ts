@@ -11,7 +11,7 @@ const INITIAL_STATUS: ImportStatusState = {
   tone: "default",
   title: "Server-backed preview",
   description:
-    "Load the bundled dataset from the Next.js API route to validate the shared grid and image handling.",
+    "Load the bundled Excel workbook through the Next.js API route to validate the shared grid and image handling.",
 };
 
 export function useDummyData() {
@@ -25,7 +25,7 @@ export function useDummyData() {
       setStatus({
         tone: "default",
         title: "Loading dummy data",
-        description: "Fetching the sample dataset from /api/dummy-data.",
+        description: "Fetching and parsing the server workbook from /api/dummy-data.",
       });
 
       const response = await fetchDummyData();
