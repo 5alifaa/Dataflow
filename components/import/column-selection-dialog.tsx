@@ -3,7 +3,6 @@
 import { useMemo, useState } from 'react';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
@@ -141,33 +140,39 @@ export function ColumnSelectionDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] sm:max-w-4xl">
-        <DialogHeader className="gap-3">
-          <DialogTitle>Select and rename columns</DialogTitle>
+        <DialogHeader className="gap-2">
+          <DialogTitle>Choose columns to import</DialogTitle>
           <DialogDescription>
-            Review every extracted column before the rows are appended to the
-            grid. Renamed values will be used as the displayed headers.
+            Review your columns before import. Renamed values become the display
+            headers.
           </DialogDescription>
-          <div className="flex flex-wrap gap-2 pt-1">
-            <Badge>{selectedCount.toLocaleString()} selected</Badge>
-            <Badge>{draftColumns.length.toLocaleString()} total</Badge>
+          <div className="flex items-center gap-3 pt-2">
+            <span className="text-sm font-medium text-stone-700">
+              {selectedCount.toLocaleString()} of{' '}
+              {draftColumns.length.toLocaleString()} selected
+            </span>
           </div>
         </DialogHeader>
         <Separator />
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="space-y-3">
           <p className="text-sm text-stone-600">
-            Choose the columns to keep, then edit their display names.
+            Select the columns to keep, then edit their display names.
           </p>
           <div className="flex flex-wrap gap-2">
             <Input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search columns"
-              className="h-9 w-[220px]"
+              placeholder="Search by original or display name"
+              className="h-9 flex-1 min-w-[220px]"
               aria-label="Search columns"
             />
             <Button
               size="sm"
-              variant="outline"
+              variant={
+                allSelected || (normalizedQuery && allVisibleSelected)
+                  ? 'default'
+                  : 'outline'
+              }
               onClick={() =>
                 normalizedQuery
                   ? selectVisibleColumns(true)
@@ -195,21 +200,21 @@ export function ColumnSelectionDialog({
                   : selectedCount === 0
               }
             >
-              {normalizedQuery ? 'Clear visible' : 'Clear all'}
+              Deselect {normalizedQuery ? 'visible' : 'all'}
             </Button>
           </div>
         </div>
-        <ScrollArea className="max-h-[58vh] pr-3">
+        <ScrollArea className="max-h-[55vh] pr-3">
           {draftColumns.length === 0 ? (
             <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
-              No columns were detected in this worksheet.
+              No columns were detected.
             </div>
           ) : filteredColumns.length === 0 ? (
             <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
-              No columns match this search.
+              No columns match your search.
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {filteredColumns.map((column, index) => {
                 const normalizedName = column.displayName
                   .trim()
@@ -224,9 +229,9 @@ export function ColumnSelectionDialog({
                 return (
                   <div
                     key={column.sourceKey}
-                    className="grid gap-3 rounded-lg border border-stone-200 bg-[#fbfbfa] p-4 md:grid-cols-[auto_1fr_1fr]"
+                    className="grid gap-4 rounded-lg border border-stone-200 bg-white p-4 md:grid-cols-[40px_1fr_1fr]"
                   >
-                    <div className="flex items-center pt-7">
+                    <div className="flex items-start pt-1">
                       <Checkbox
                         checked={column.selected}
                         onCheckedChange={(checked) =>
@@ -234,51 +239,56 @@ export function ColumnSelectionDialog({
                             selected: checked === true,
                           })
                         }
-                        aria-label={`Select ${column.originalHeader}`}
+                        aria-label={`Import column: ${column.originalHeader}`}
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-stone-600">
-                        Original column
+                    <div className="space-y-2 min-w-0">
+                      <Label className="text-xs font-semibold text-stone-500 uppercase tracking-wider">
+                        Original
                       </Label>
-                      <p className="rounded-md border border-stone-200 bg-stone-100 px-3 py-2 text-sm text-stone-700">
-                        {column.originalHeader}
-                      </p>
-                      <p className="text-xs text-stone-500">
-                        Column {index + 1}
-                      </p>
+                      <div className="rounded border border-stone-200 bg-stone-50 px-3 py-2.5">
+                        <p className="truncate text-sm text-stone-700 font-medium">
+                          {column.originalHeader}
+                        </p>
+                        <p className="text-xs text-stone-500 mt-1">
+                          Column {index + 1}
+                        </p>
+                      </div>
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-2 min-w-0">
                       <Label
                         htmlFor={`display-${column.sourceKey}`}
-                        className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-stone-600"
+                        className="text-xs font-semibold text-stone-500 uppercase tracking-wider"
                       >
-                        Displayed column
+                        Display name
                       </Label>
-                      <Input
-                        id={`display-${column.sourceKey}`}
-                        className={
-                          isEmptySelected || isDuplicateSelected
-                            ? 'border-rose-300 focus-visible:border-rose-700 focus-visible:ring-rose-700/10'
-                            : undefined
-                        }
-                        value={column.displayName}
-                        onChange={(event) =>
-                          updateColumn(column.sourceKey, {
-                            displayName: event.target.value,
-                          })
-                        }
-                      />
-                      {isEmptySelected ? (
-                        <p className="text-xs text-rose-700">
-                          Displayed column name is required.
-                        </p>
-                      ) : null}
-                      {isDuplicateSelected ? (
-                        <p className="text-xs text-rose-700">
-                          Displayed column name must be unique.
-                        </p>
-                      ) : null}
+                      <div>
+                        <Input
+                          id={`display-${column.sourceKey}`}
+                          className={`${
+                            isEmptySelected || isDuplicateSelected
+                              ? 'border-rose-300 focus-visible:border-rose-700 focus-visible:ring-rose-700/10'
+                              : ''
+                          }`}
+                          value={column.displayName}
+                          onChange={(event) =>
+                            updateColumn(column.sourceKey, {
+                              displayName: event.target.value,
+                            })
+                          }
+                          placeholder="Enter name"
+                        />
+                        {isEmptySelected ? (
+                          <p className="text-xs text-rose-700 mt-1.5">
+                            Required
+                          </p>
+                        ) : null}
+                        {isDuplicateSelected ? (
+                          <p className="text-xs text-rose-700 mt-1.5">
+                            Name must be unique
+                          </p>
+                        ) : null}
+                      </div>
                     </div>
                   </div>
                 );
@@ -290,11 +300,11 @@ export function ColumnSelectionDialog({
           <Alert tone="error">
             <AlertTitle>Fix column names before importing</AlertTitle>
             <AlertDescription>
-              Selected columns need non-empty, unique displayed names.
+              Selected columns need unique, non-empty display names.
             </AlertDescription>
           </Alert>
         ) : null}
-        <DialogFooter>
+        <DialogFooter className="gap-2 sm:gap-0">
           <Button variant="outline" onClick={onCancel}>
             Cancel
           </Button>
@@ -302,7 +312,8 @@ export function ColumnSelectionDialog({
             onClick={() => onConfirm(draftColumns)}
             disabled={selectedCount === 0 || hasInvalidSelectedNames}
           >
-            Import {selectedCount.toLocaleString()} columns
+            Import {selectedCount.toLocaleString()} column
+            {selectedCount === 1 ? '' : 's'}
           </Button>
         </DialogFooter>
       </DialogContent>
