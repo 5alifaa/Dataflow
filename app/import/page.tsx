@@ -7,10 +7,8 @@ export default function ImportPage() {
     <AppShell>
       <PageHeader
         backHref="/"
-        eyebrow="DataFlow"
-        badge="Local parsing"
-        title="Import Excel"
-        description="Upload a workbook, review the detected columns, and append clean rows to the table."
+        title="Import workbooks with intent."
+        description="Upload a workbook, review the detected columns, and append clean rows only after the structure is right."
       />
       <ExcelImportWorkspace />
     </AppShell>

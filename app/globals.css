@@ -2,22 +2,22 @@
 
 /* ─── Minimalist-UI Design Tokens ─────────────────────────────── */
 :root {
-  --background: #fbfbfa;
+  --background: #f7f3ea;
   --foreground: #111111;
 
-  --canvas:  #fbfbfa;
+  --canvas:  #f7f3ea;
   --surface: #ffffff;
-  --border:  #eaeaea;
+  --border:  #ded7c8;
   --ink:     #111111;
   --ink-2:   #2f3437;
   --ink-3:   #787774;
 
-  --pale-blue-bg:    #e1f3fe;
-  --pale-blue-text:  #1f6c9f;
-  --pale-green-bg:   #edf3ec;
-  --pale-green-text: #346538;
-  --pale-yellow-bg:  #fbf3db;
-  --pale-yellow-text:#956400;
+  --pale-blue-bg:    #dfeaf2;
+  --pale-blue-text:  #24495e;
+  --pale-green-bg:   #e4efe3;
+  --pale-green-text: #2f5f3b;
+  --pale-yellow-bg:  #fff3d3;
+  --pale-yellow-text:#765308;
 
   --font-serif: var(--font-newsreader), 'Instrument Serif', Georgia, serif;
 }
@@ -80,7 +80,7 @@ img { display: block; }
 /* ─── Bento card hover ─────────────────────────────────────────── */
 .bento-card {
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 8px;
   background: var(--surface);
   transition:
     box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1),
@@ -170,7 +170,7 @@ img { display: block; }
   border-radius: 9999px;
   font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -198,14 +198,14 @@ img { display: block; }
 
 /* ─── AG Grid ──────────────────────────────────────────────────── */
 .ag-theme-quartz {
-  --ag-background-color: rgba(255, 255, 255, 0.94);
-  --ag-border-color: #e7e5e4;
-  --ag-header-background-color: #f5f5f4;
+  --ag-background-color: rgba(255, 255, 255, 0.96);
+  --ag-border-color: #ded7c8;
+  --ag-header-background-color: #f7f3ea;
   --ag-header-foreground-color: #292524;
   --ag-foreground-color: #1c1917;
-  --ag-odd-row-background-color: #fafaf9;
-  --ag-row-hover-color: rgba(251, 243, 219, 0.55);
-  --ag-selected-row-background-color: rgba(237, 243, 236, 0.82);
+  --ag-odd-row-background-color: #fbfaf5;
+  --ag-row-hover-color: rgba(223, 234, 242, 0.52);
+  --ag-selected-row-background-color: rgba(228, 239, 227, 0.82);
   --ag-font-family: var(--font-geist-sans), sans-serif;
   --ag-font-size: 14px;
   --ag-borders: solid 1px;

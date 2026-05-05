@@ -147,7 +147,7 @@ export function ColumnSelectionDialog({
             headers.
           </DialogDescription>
           <div className="flex items-center gap-3 pt-2">
-            <span className="text-sm font-medium text-stone-700">
+            <span className="rounded-full bg-white/70 px-3 py-1 text-sm font-semibold text-stone-700 ring-1 ring-stone-200">
               {selectedCount.toLocaleString()} of{' '}
               {draftColumns.length.toLocaleString()} selected
             </span>
@@ -155,7 +155,7 @@ export function ColumnSelectionDialog({
         </DialogHeader>
         <Separator />
         <div className="space-y-3">
-          <p className="text-sm text-stone-600">
+          <p className="text-sm leading-6 text-stone-600">
             Select the columns to keep, then edit their display names.
           </p>
           <div className="flex flex-wrap gap-2">
@@ -163,7 +163,7 @@ export function ColumnSelectionDialog({
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search by original or display name"
-              className="h-9 flex-1 min-w-[220px]"
+              className="h-10 flex-1 min-w-[220px] bg-white/80"
               aria-label="Search columns"
             />
             <Button
@@ -206,15 +206,15 @@ export function ColumnSelectionDialog({
         </div>
         <ScrollArea className="max-h-[55vh] pr-3">
           {draftColumns.length === 0 ? (
-            <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
+            <div className="rounded-lg border border-stone-200 bg-white/70 p-4 text-sm text-stone-600">
               No columns were detected.
             </div>
           ) : filteredColumns.length === 0 ? (
-            <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
+            <div className="rounded-lg border border-stone-200 bg-white/70 p-4 text-sm text-stone-600">
               No columns match your search.
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {filteredColumns.map((column, index) => {
                 const normalizedName = column.displayName
                   .trim()
@@ -229,7 +229,7 @@ export function ColumnSelectionDialog({
                 return (
                   <div
                     key={column.sourceKey}
-                    className="grid gap-4 rounded-lg border border-stone-200 bg-white p-4 md:grid-cols-[40px_1fr_1fr]"
+                    className="grid gap-4 rounded-lg border border-white/80 bg-white/75 p-4 shadow-[0_12px_45px_rgba(28,25,23,0.045)] md:grid-cols-[40px_1fr_1fr]"
                   >
                     <div className="flex items-start pt-1">
                       <Checkbox
@@ -243,29 +243,27 @@ export function ColumnSelectionDialog({
                       />
                     </div>
                     <div className="space-y-2 min-w-0">
-                      <Label className="text-xs font-semibold text-stone-500 uppercase tracking-wider">
+                      <Label className="text-xs font-semibold uppercase tracking-normal text-stone-500">
                         Original
                       </Label>
-                      <div className="rounded border border-stone-200 bg-stone-50 px-3 py-2.5">
+                      <div className="rounded-md border border-stone-200 bg-[#fbfaf5] px-3 py-2.5">
                         <p className="truncate text-sm text-stone-700 font-medium">
                           {column.originalHeader}
                         </p>
-                        <p className="text-xs text-stone-500 mt-1">
-                          Column {index + 1}
-                        </p>
+                        <p className="mt-1 text-xs text-stone-500">{index + 1}</p>
                       </div>
                     </div>
                     <div className="space-y-2 min-w-0">
                       <Label
                         htmlFor={`display-${column.sourceKey}`}
-                        className="text-xs font-semibold text-stone-500 uppercase tracking-wider"
+                        className="text-xs font-semibold uppercase tracking-normal text-stone-500"
                       >
                         Display name
                       </Label>
                       <div>
                         <Input
                           id={`display-${column.sourceKey}`}
-                          className={`${
+                          className={`bg-white/90 ${
                             isEmptySelected || isDuplicateSelected
                               ? 'border-rose-300 focus-visible:border-rose-700 focus-visible:ring-rose-700/10'
                               : ''

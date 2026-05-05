@@ -36,8 +36,8 @@ export function DataGrid({
 }: DataGridProps) {
   if (loading) {
     return (
-      <Card className="overflow-hidden rounded-lg shadow-none">
-        <CardHeader className="border-b border-stone-200 bg-white">
+      <Card className="overflow-hidden">
+        <CardHeader className="border-b border-stone-950/10 bg-white/40">
           <CardTitle>{title}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 p-6">
@@ -53,20 +53,20 @@ export function DataGrid({
   }
 
   return (
-    <Card className="overflow-hidden rounded-lg shadow-none">
-      <CardHeader className="grid gap-3 border-b border-stone-200 bg-white sm:grid-cols-[1fr_auto] sm:items-center">
+    <Card className="overflow-hidden">
+      <CardHeader className="grid gap-3 border-b border-stone-950/10 bg-white/40 sm:grid-cols-[1fr_auto] sm:items-center">
         <CardTitle>{title}</CardTitle>
-        <div className="flex flex-wrap gap-2 text-[0.6875rem] font-semibold uppercase tracking-[0.06em] text-stone-500">
-          <span className="rounded-full bg-[#fbfbfa] px-3 py-1 ring-1 ring-stone-200">
+        <div className="flex flex-wrap gap-2 text-xs font-semibold text-stone-600">
+          <span className="rounded-full bg-white/70 px-3 py-1 ring-1 ring-stone-200">
             {rows.length.toLocaleString()} rows
           </span>
-          <span className="rounded-full bg-[#fbfbfa] px-3 py-1 ring-1 ring-stone-200">
+          <span className="rounded-full bg-white/70 px-3 py-1 ring-1 ring-stone-200">
             {columns.length.toLocaleString()} columns
           </span>
         </div>
       </CardHeader>
       <CardContent className="p-3 sm:p-4">
-        <div className="ag-theme-quartz h-[620px] w-full overflow-hidden rounded-md border border-stone-200">
+        <div className="ag-theme-quartz h-[620px] w-full overflow-hidden rounded-md border border-stone-200 bg-white">
           <AgGridView columns={columns} rows={rows} />
         </div>
       </CardContent>

@@ -48,7 +48,7 @@ function formatFileSize(bytes: number) {
 
 function ImportCountBadge({ value, label }: { value: number; label: string }) {
   return (
-    <Badge className="bg-[#fbfbfa] text-stone-600 ring-1 ring-stone-200">
+    <Badge className="bg-white/70 text-stone-700 ring-1 ring-stone-200">
       {value.toLocaleString()} {label}
     </Badge>
   );
@@ -75,16 +75,16 @@ function FilePickerCallout({ hasSelectedFile }: { hasSelectedFile: boolean }) {
   return (
     <label
       htmlFor="excel-file"
-      className="group flex min-h-32 cursor-pointer items-center gap-4 rounded-lg border border-dashed border-stone-300 bg-[#fbfbfa] p-5 transition-[background-color,border-color] duration-200 hover:border-stone-500 hover:bg-white"
+      className="group flex min-h-40 cursor-pointer items-center gap-5 rounded-lg border border-dashed border-stone-300 bg-[#fbfaf5] p-6 transition-[background-color,border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-stone-500 hover:bg-white"
     >
-      <span className="flex size-11 shrink-0 items-center justify-center rounded-md border border-stone-200 bg-white text-stone-800">
-        <FileArrowUp className="size-5" weight="regular" />
+      <span className="flex size-12 shrink-0 items-center justify-center rounded-lg border border-stone-200 bg-white text-stone-950 shadow-[0_12px_40px_rgba(28,25,23,0.06)]">
+        <FileArrowUp className="size-5 transition-transform duration-300 group-hover:-translate-y-0.5" weight="regular" />
       </span>
       <span className="min-w-0 text-left">
-        <span className="block font-medium text-stone-950">
+        <span className="block text-lg font-semibold tracking-normal text-stone-950">
           {hasSelectedFile ? 'Replace workbook' : 'Choose workbook'}
         </span>
-        <span className="mt-1 block max-w-xl text-sm leading-6 text-stone-600">
+        <span className="mt-2 block max-w-xl text-sm leading-6 text-stone-600">
           Select a local .xlsx or .xls file. Nothing is appended until you
           confirm the columns.
         </span>
@@ -102,7 +102,7 @@ function SelectedFileSummary({ selectedFile }: { selectedFile: File | null }) {
   return (
     <div
       id="excel-file-selection"
-      className="flex min-h-14 items-center gap-3 rounded-lg bg-[#fbfbfa] px-3 text-sm text-stone-700 ring-1 ring-stone-200"
+      className="flex min-h-14 items-center gap-3 rounded-lg bg-white/70 px-3 text-sm text-stone-700 ring-1 ring-stone-200"
       aria-live="polite"
     >
       {hasSelectedFile ? (
@@ -134,7 +134,7 @@ function ImportWorkbookButton({
       size="lg"
       onClick={() => void onImport()}
       disabled={disabled}
-      className="w-full bg-stone-900 hover:bg-stone-800"
+      className="w-full bg-stone-950 text-white hover:bg-stone-800"
       aria-busy={isParsing}
     >
       {isParsing ? (
@@ -165,13 +165,13 @@ export function ExcelImportPanel({
   const importDisabled = isParsing || !hasSelectedFile;
 
   return (
-    <Card className="overflow-hidden rounded-lg border-stone-200 bg-white shadow-none">
-      <CardHeader className="border-b border-stone-200 bg-white p-5 sm:p-6">
+    <Card className="overflow-hidden">
+      <CardHeader className="border-b border-stone-950/10 bg-white/40 p-5 sm:p-6">
         <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
           <div className="space-y-1">
-            <CardTitle>Workbook</CardTitle>
+            <CardTitle>Workbook intake</CardTitle>
             <CardDescription>
-              Choose a workbook. Column review happens before rows are added.
+              Choose a workbook, then shape the schema before rows enter the grid.
             </CardDescription>
           </div>
           <div className="flex flex-wrap gap-2 md:justify-end">
@@ -186,14 +186,11 @@ export function ExcelImportPanel({
             <div className="space-y-1">
               <label
                 htmlFor="excel-file"
-                className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-stone-600"
+                className="text-[0.6875rem] font-semibold uppercase tracking-normal text-stone-600"
               >
                 Excel workbook
               </label>
-              <p
-                id="excel-file-hint"
-                className="text-sm leading-6 text-stone-600"
-              >
+              <p id="excel-file-hint" className="text-sm leading-6 text-stone-600">
                 Accepted formats: .xlsx and .xls. Parsing happens locally in
                 your browser worker.
               </p>
@@ -204,7 +201,7 @@ export function ExcelImportPanel({
 
           <aside className="flex flex-col justify-between gap-4 border-t border-stone-200 pt-5 lg:border-l lg:border-t-0 lg:pl-5 lg:pt-0">
             <div className="space-y-3">
-              <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-stone-600">
+              <p className="text-[0.6875rem] font-semibold uppercase tracking-normal text-stone-600">
                 Selected file
               </p>
               <SelectedFileSummary selectedFile={selectedFile} />

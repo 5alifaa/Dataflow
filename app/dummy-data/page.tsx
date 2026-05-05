@@ -7,10 +7,8 @@ export default function DummyDataPage() {
     <AppShell>
       <PageHeader
         backHref="/"
-        eyebrow="DataFlow POC"
-        badge="API route"
-        title="Server Dummy Data"
-        description="Fetch a bundled JSON dataset through a typed Next.js route and render it through the same AG Grid experience used by the Excel import flow."
+        title="Explore the sample dataset."
+        description="Fetch bundled JSON through a typed route and inspect it in the same grid used by the workbook import flow."
       />
       <DummyDataWorkspace />
     </AppShell>

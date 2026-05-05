@@ -17,7 +17,7 @@ const DialogOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
-    className={cn("fixed inset-0 z-50 bg-stone-950/35 backdrop-blur-[2px]", className)}
+    className={cn("fixed inset-0 z-50 bg-stone-950/40 backdrop-blur-[3px]", className)}
     {...props}
   />
 ));
@@ -32,13 +32,13 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-[50%] top-[50%] z-50 grid max-h-[90vh] w-[min(92vw,880px)] translate-x-[-50%] translate-y-[-50%] gap-4 overflow-hidden rounded-xl border border-stone-200 bg-white p-6 shadow-[0_24px_80px_rgba(28,25,23,0.14)] duration-200",
+        "fixed left-[50%] top-[50%] z-50 grid max-h-[90vh] w-[min(92vw,880px)] translate-x-[-50%] translate-y-[-50%] gap-4 overflow-hidden rounded-lg border border-white/70 bg-[#fbfaf5] p-6 shadow-[0_30px_120px_rgba(28,25,23,0.2)] duration-200",
         className,
       )}
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className="absolute right-4 top-4 flex size-10 cursor-pointer items-center justify-center rounded-md text-stone-500 transition-[background-color,color,transform] hover:bg-stone-100 hover:text-stone-900 active:scale-[0.96]">
+      <DialogPrimitive.Close className="absolute right-4 top-4 flex size-10 cursor-pointer items-center justify-center rounded-md text-stone-500 transition-[background-color,color,transform] hover:bg-stone-950/5 hover:text-stone-900 active:scale-[0.96]">
         <X className="size-4" weight="bold" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
@@ -70,7 +70,7 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn("text-xl font-semibold text-stone-950", className)}
+    className={cn("text-2xl font-semibold tracking-normal text-stone-950", className)}
     {...props}
   />
 ));

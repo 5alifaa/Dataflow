@@ -23,19 +23,19 @@ export function DummyDataWorkspace() {
   return (
     <div className="space-y-6">
       <Card className="overflow-hidden">
-        <CardHeader className="grid gap-5 border-b border-stone-200 bg-[#f9f9f8] lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+        <CardHeader className="grid gap-5 border-b border-stone-950/10 bg-white/40 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="space-y-2">
-            <CardTitle>Server dummy data</CardTitle>
+            <CardTitle>Sample route</CardTitle>
             <p className="text-sm leading-6 text-stone-600">
               Load the API-backed sample dataset to validate the shared grid,
               wide schemas, and thumbnail rendering without a file upload.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <div className="rounded-full bg-stone-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.06em] text-stone-700">
+            <div className="rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-stone-700 ring-1 ring-stone-200">
               {rowCount.toLocaleString()} rows
             </div>
-            <div className="rounded-full bg-stone-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.06em] text-stone-700">
+            <div className="rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-stone-700 ring-1 ring-stone-200">
               {columnCount.toLocaleString()} columns
             </div>
             <Button onClick={() => void loadDummyData()} disabled={isLoading}>
