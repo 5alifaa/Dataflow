@@ -25,8 +25,8 @@ export function PageHeader({
   actions,
 }: PageHeaderProps) {
   return (
-    <header className="grid gap-6 border-b border-stone-200 pb-8 pt-2 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-      <div className="max-w-4xl space-y-4">
+    <header className="grid gap-6 border-b border-stone-200 pb-7 pt-2 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+      <div className="max-w-3xl space-y-5">
         <div className="flex flex-wrap items-center gap-3">
           {backHref ? (
             <Button asChild variant="ghost" size="sm">
@@ -43,11 +43,11 @@ export function PageHeader({
           ) : null}
           {badge ? <Badge>{badge}</Badge> : null}
         </div>
-        <div className="space-y-2">
-          <h1 className="text-4xl font-semibold tracking-tight text-stone-950 sm:text-5xl">
+        <div className="space-y-3">
+          <h1 className="text-4xl font-semibold tracking-[-0.03em] text-stone-950 sm:text-5xl">
             {title}
           </h1>
-          <p className="max-w-3xl text-base leading-7 text-stone-600">
+          <p className="max-w-2xl text-base leading-7 text-stone-600">
             {description}
           </p>
         </div>

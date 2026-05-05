@@ -7,10 +7,10 @@ export default function ImportPage() {
     <AppShell>
       <PageHeader
         backHref="/"
-        eyebrow="DataFlow POC"
-        badge="Worker parsing"
-        title="Excel Import Workflow"
-        description="Parse Excel files off the main thread, choose the columns that matter, rename the headers, and append the results into one large virtualized table."
+        eyebrow="DataFlow"
+        badge="Local parsing"
+        title="Import Excel"
+        description="Upload a workbook, review the detected columns, and append clean rows to the table."
       />
       <ExcelImportWorkspace />
     </AppShell>

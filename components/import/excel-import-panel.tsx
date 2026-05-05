@@ -1,20 +1,29 @@
-"use client";
+'use client';
 
-import { FileXls, SpinnerGap, UploadSimple } from "@phosphor-icons/react";
+import {
+  CheckCircle,
+  FileArrowUp,
+  FileXls,
+  SpinnerGap,
+  UploadSimple,
+  X,
+} from '@phosphor-icons/react';
 
-import { ImportStatus } from "@/components/import/import-status";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { ImportStatus } from '@/components/import/import-status';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import type { ImportStatusState } from "@/lib/types";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import type { ImportStatusState } from '@/lib/types';
+
+const EMPTY_SELECTION_COPY = 'Import is disabled until a workbook is chosen.';
 
 interface ExcelImportPanelProps {
   selectedFile: File | null;
@@ -37,6 +46,112 @@ function formatFileSize(bytes: number) {
   return `${Math.max(1, Math.round(bytes / 1024))} KB`;
 }
 
+function ImportCountBadge({ value, label }: { value: number; label: string }) {
+  return (
+    <Badge className="bg-[#fbfbfa] text-stone-600 ring-1 ring-stone-200">
+      {value.toLocaleString()} {label}
+    </Badge>
+  );
+}
+
+function HiddenFileInput({
+  onFileChange,
+}: {
+  onFileChange: (file: File | null) => void;
+}) {
+  return (
+    <Input
+      id="excel-file"
+      type="file"
+      accept=".xlsx,.xls"
+      aria-describedby="excel-file-hint excel-file-selection"
+      className="sr-only"
+      onChange={(event) => onFileChange(event.target.files?.[0] ?? null)}
+    />
+  );
+}
+
+function FilePickerCallout({ hasSelectedFile }: { hasSelectedFile: boolean }) {
+  return (
+    <label
+      htmlFor="excel-file"
+      className="group flex min-h-32 cursor-pointer items-center gap-4 rounded-lg border border-dashed border-stone-300 bg-[#fbfbfa] p-5 transition-[background-color,border-color] duration-200 hover:border-stone-500 hover:bg-white"
+    >
+      <span className="flex size-11 shrink-0 items-center justify-center rounded-md border border-stone-200 bg-white text-stone-800">
+        <FileArrowUp className="size-5" weight="regular" />
+      </span>
+      <span className="min-w-0 text-left">
+        <span className="block font-medium text-stone-950">
+          {hasSelectedFile ? 'Replace workbook' : 'Choose workbook'}
+        </span>
+        <span className="mt-1 block max-w-xl text-sm leading-6 text-stone-600">
+          Select a local .xlsx or .xls file. Nothing is appended until you
+          confirm the columns.
+        </span>
+      </span>
+    </label>
+  );
+}
+
+function SelectedFileSummary({ selectedFile }: { selectedFile: File | null }) {
+  const hasSelectedFile = Boolean(selectedFile);
+  const fileDetails = selectedFile
+    ? formatFileSize(selectedFile.size)
+    : EMPTY_SELECTION_COPY;
+
+  return (
+    <div
+      id="excel-file-selection"
+      className="flex min-h-14 items-center gap-3 rounded-lg bg-[#fbfbfa] px-3 text-sm text-stone-700 ring-1 ring-stone-200"
+      aria-live="polite"
+    >
+      {hasSelectedFile ? (
+        <CheckCircle className="size-5 shrink-0 text-[#346538]" weight="fill" />
+      ) : (
+        <FileXls className="size-5 shrink-0 text-stone-500" weight="duotone" />
+      )}
+      <span className="min-w-0">
+        <span className="block truncate font-medium text-stone-950">
+          {selectedFile?.name ?? 'No file selected'}
+        </span>
+        <span className="block text-xs text-stone-500">{fileDetails}</span>
+      </span>
+    </div>
+  );
+}
+
+function ImportWorkbookButton({
+  disabled,
+  isParsing,
+  onImport,
+}: {
+  disabled: boolean;
+  isParsing: boolean;
+  onImport: () => Promise<void>;
+}) {
+  return (
+    <Button
+      size="lg"
+      onClick={() => void onImport()}
+      disabled={disabled}
+      className="w-full bg-stone-900 hover:bg-stone-800"
+      aria-busy={isParsing}
+    >
+      {isParsing ? (
+        <>
+          <SpinnerGap className="size-4 animate-spin" weight="bold" />
+          Parsing workbook
+        </>
+      ) : (
+        <>
+          <UploadSimple className="size-4" weight="bold" />
+          Import workbook
+        </>
+      )}
+    </Button>
+  );
+}
+
 export function ExcelImportPanel({
   selectedFile,
   status,
@@ -47,78 +162,78 @@ export function ExcelImportPanel({
   onImport,
 }: ExcelImportPanelProps) {
   const hasSelectedFile = Boolean(selectedFile);
+  const importDisabled = isParsing || !hasSelectedFile;
 
   return (
-    <Card className="overflow-hidden">
-      <CardHeader className="gap-4 border-b border-stone-200 bg-[#f9f9f8]">
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
+    <Card className="overflow-hidden rounded-lg border-stone-200 bg-white shadow-none">
+      <CardHeader className="border-b border-stone-200 bg-white p-5 sm:p-6">
+        <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
           <div className="space-y-1">
-            <CardTitle>Excel import</CardTitle>
+            <CardTitle>Workbook</CardTitle>
             <CardDescription>
-              Upload a workbook, parse it in a worker, and review the extracted
-              columns before the rows are appended.
+              Choose a workbook. Column review happens before rows are added.
             </CardDescription>
-            <p className="text-xs uppercase tracking-[0.08em] text-stone-500">
-              Step 1 upload, step 2 map columns, step 3 append rows
-            </p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <Badge>{counts.rows.toLocaleString()} rows</Badge>
-            <Badge>{counts.columns.toLocaleString()} columns</Badge>
+          <div className="flex flex-wrap gap-2 md:justify-end">
+            <ImportCountBadge value={counts.rows} label="rows" />
+            <ImportCountBadge value={counts.columns} label="columns" />
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-5 p-6">
-        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-          <div className="space-y-3">
-            <label
-              htmlFor="excel-file"
-              className="text-sm font-medium text-stone-900"
-            >
-              Excel workbook
-            </label>
-            <p id="excel-file-hint" className="text-sm text-stone-600">
-              Accepted formats: .xlsx, .xls. Files are parsed locally in your
-              browser worker.
-            </p>
-            <Input
-              id="excel-file"
-              type="file"
-              accept=".xlsx,.xls"
-              aria-describedby="excel-file-hint"
-              onChange={(event) =>
-                onFileChange(event.target.files?.[0] ?? null)
-              }
-            />
-            <div className="flex min-h-12 items-center gap-3 rounded-lg border border-dashed border-stone-200 bg-[#fbfbfa] px-4 text-sm text-stone-600">
-              <FileXls className="size-5 text-[#346538]" weight="duotone" />
-              <span className="truncate" aria-live="polite">
-                {selectedFile
-                  ? `${selectedFile.name} (${formatFileSize(selectedFile.size)})`
-                  : "No file selected yet"}
-              </span>
+      <CardContent className="space-y-5 p-5 sm:p-6">
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="space-y-4">
+            <div className="space-y-1">
+              <label
+                htmlFor="excel-file"
+                className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-stone-600"
+              >
+                Excel workbook
+              </label>
+              <p
+                id="excel-file-hint"
+                className="text-sm leading-6 text-stone-600"
+              >
+                Accepted formats: .xlsx and .xls. Parsing happens locally in
+                your browser worker.
+              </p>
             </div>
+            <FilePickerCallout hasSelectedFile={hasSelectedFile} />
+            <HiddenFileInput onFileChange={onFileChange} />
           </div>
-          <Button
-            size="lg"
-            onClick={() => void onImport()}
-            disabled={isParsing || !hasSelectedFile}
-            className="min-w-44"
-            aria-busy={isParsing}
-          >
-            {isParsing ? (
-              <>
-                <SpinnerGap className="size-4 animate-spin" weight="bold" />
-                Parsing
-              </>
-            ) : (
-              <>
-                <UploadSimple className="size-4" weight="bold" />
-                Import workbook
-              </>
-            )}
-          </Button>
+
+          <aside className="flex flex-col justify-between gap-4 border-t border-stone-200 pt-5 lg:border-l lg:border-t-0 lg:pl-5 lg:pt-0">
+            <div className="space-y-3">
+              <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-stone-600">
+                Selected file
+              </p>
+              <SelectedFileSummary selectedFile={selectedFile} />
+              {hasSelectedFile ? (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="h-9 w-fit text-stone-600"
+                  onClick={() => onFileChange(null)}
+                >
+                  <X className="size-4" weight="bold" />
+                  Clear file
+                </Button>
+              ) : null}
+            </div>
+            <ImportWorkbookButton
+              disabled={importDisabled}
+              isParsing={isParsing}
+              onImport={onImport}
+            />
+          </aside>
         </div>
+
+        {!hasSelectedFile ? (
+          <p className="text-xs leading-5 text-stone-500">
+            Select a workbook to enable import.
+          </p>
+        ) : null}
 
         {warningMessage ? (
           <Alert tone="warning">
