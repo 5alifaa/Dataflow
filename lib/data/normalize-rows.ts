@@ -43,34 +43,45 @@ export function normalizeParsedRows(
   });
 }
 
+function matchesExistingColumn(
+  normalizedColumnName: string,
+  existingColumn: GridColumn,
+) {
+  if (normalizedColumnName.length === 0) {
+    return false;
+  }
+
+  return [existingColumn.headerName, existingColumn.sourceKey ?? ""]
+    .map(normalizeColumnIdentity)
+    .some((value) => value === normalizedColumnName);
+}
+
+function findMatchingColumn(column: string, existingColumns: GridColumn[]) {
+  const normalizedColumnName = normalizeColumnIdentity(column);
+
+  return existingColumns.find((existingColumn) =>
+    matchesExistingColumn(normalizedColumnName, existingColumn),
+  );
+}
+
+function getDisplayName(column: string, existingColumns: GridColumn[]) {
+  const existingColumn = findMatchingColumn(column, existingColumns);
+
+  if (existingColumn) {
+    return existingColumn.headerName;
+  }
+
+  return isNonEmptyString(column) ? column : "Untitled Column";
+}
+
 export function buildColumnSelection(
   columns: string[],
   existingColumns: GridColumn[] = [],
 ) {
-  return columns.map((column) => {
-    const normalizedSourceKey = normalizeColumnIdentity(column);
-    const existingMatch = existingColumns.find((existingColumn) => {
-      const normalizedHeaderName = normalizeColumnIdentity(
-        existingColumn.headerName,
-      );
-      const normalizedExistingSourceKey = normalizeColumnIdentity(
-        existingColumn.sourceKey ?? "",
-      );
-
-      return (
-        normalizedSourceKey.length > 0 &&
-        (normalizedSourceKey === normalizedHeaderName ||
-          normalizedSourceKey === normalizedExistingSourceKey)
-      );
-    });
-
-    return {
-      sourceKey: column,
-      originalHeader: column,
-      displayName:
-        existingMatch?.headerName ??
-        (isNonEmptyString(column) ? column : "Untitled Column"),
-      selected: true,
-    };
-  });
+  return columns.map((column) => ({
+    sourceKey: column,
+    originalHeader: column,
+    displayName: getDisplayName(column, existingColumns),
+    selected: true,
+  }));
 }

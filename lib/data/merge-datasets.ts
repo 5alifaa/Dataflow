@@ -18,6 +18,10 @@ interface PreparedIncomingColumn {
   sourceKey: string;
 }
 
+function toColumnIdentity(value: string | undefined) {
+  return normalizeColumnIdentity(value ?? "");
+}
+
 function dedupeColumnKey(baseKey: string, usedKeys: Set<string>) {
   let candidate = baseKey || "column";
   let suffix = 2;
@@ -31,6 +35,60 @@ function dedupeColumnKey(baseKey: string, usedKeys: Set<string>) {
   return candidate;
 }
 
+function matchesNormalizedIdentity(identity: string, value: string | undefined) {
+  return identity.length > 0 && toColumnIdentity(value) === identity;
+}
+
+function findExistingColumnMatch(
+  selection: ExcelColumnOption,
+  existingColumns: GridColumn[],
+) {
+  const sourceIdentity = toColumnIdentity(selection.sourceKey);
+  const displayIdentity = toColumnIdentity(
+    selection.displayName || selection.sourceKey,
+  );
+
+  return existingColumns.find(
+    (column) =>
+      matchesNormalizedIdentity(sourceIdentity, column.sourceKey) ||
+      matchesNormalizedIdentity(sourceIdentity, column.headerName) ||
+      matchesNormalizedIdentity(displayIdentity, column.headerName),
+  );
+}
+
+function createPreparedIncomingColumn(
+  selection: ExcelColumnOption,
+  usedKeys: Set<string>,
+) {
+  const baseKey = slugifyLabel(selection.displayName || selection.sourceKey);
+
+  return {
+    key: dedupeColumnKey(baseKey, usedKeys),
+    headerName: titleCaseLabel(selection.displayName || selection.sourceKey),
+    sourceKey: selection.sourceKey,
+  };
+}
+
+function toGridColumn(column: PreparedIncomingColumn): GridColumn {
+  return {
+    key: column.key,
+    headerName: column.headerName,
+    sourceKey: column.sourceKey,
+  };
+}
+
+function getAdditionalColumns(
+  currentColumns: GridColumn[],
+  incomingColumns: PreparedIncomingColumn[],
+) {
+  return incomingColumns
+    .filter(
+      (incomingColumn) =>
+        !currentColumns.some((column) => column.key === incomingColumn.key),
+    )
+    .map(toGridColumn);
+}
+
 function prepareIncomingColumns(
   selections: ExcelColumnOption[],
   existingColumns: GridColumn[],
@@ -40,20 +98,7 @@ function prepareIncomingColumns(
   return selections
     .filter((selection) => selection.selected)
     .map<PreparedIncomingColumn>((selection) => {
-      const normalizedSourceKey = normalizeColumnIdentity(selection.sourceKey);
-      const normalizedDisplayName = normalizeColumnIdentity(
-        selection.displayName || selection.sourceKey,
-      );
-      const existingMatch = existingColumns.find(
-        (column) =>
-          (normalizedSourceKey.length > 0 &&
-            (normalizeColumnIdentity(column.sourceKey ?? "") ===
-              normalizedSourceKey ||
-              normalizeColumnIdentity(column.headerName) ===
-                normalizedSourceKey)) ||
-          (normalizedDisplayName.length > 0 &&
-            normalizeColumnIdentity(column.headerName) === normalizedDisplayName),
-      );
+      const existingMatch = findExistingColumnMatch(selection, existingColumns);
 
       if (existingMatch) {
         usedKeys.add(existingMatch.key);
@@ -64,12 +109,7 @@ function prepareIncomingColumns(
         };
       }
 
-      const baseKey = slugifyLabel(selection.displayName || selection.sourceKey);
-      return {
-        key: dedupeColumnKey(baseKey, usedKeys),
-        headerName: titleCaseLabel(selection.displayName || selection.sourceKey),
-        sourceKey: selection.sourceKey,
-      };
+      return createPreparedIncomingColumn(selection, usedKeys);
     });
 }
 
@@ -107,38 +147,12 @@ export function mergeImportedDataset(params: {
 }): ImportBatchResult {
   const { current, selections, parsedRows, batchId } = params;
   const incomingColumns = prepareIncomingColumns(selections, current.columns);
+  const additionalColumns = getAdditionalColumns(current.columns, incomingColumns);
+  const mergedColumnsBase = [...current.columns, ...additionalColumns];
   const incomingRows = parsedRows.map((row, index) =>
     normalizeRowForColumns(row, incomingColumns, `${batchId}-${index}`),
   );
-
-  const appendedRows = backfillRows(incomingRows, [
-    ...current.columns,
-    ...incomingColumns
-      .filter(
-        (incomingColumn) =>
-          !current.columns.some((column) => column.key === incomingColumn.key),
-      )
-      .map<GridColumn>((column) => ({
-        key: column.key,
-        headerName: column.headerName,
-        sourceKey: column.sourceKey,
-      })),
-  ]);
-
-  const mergedColumnsBase = [
-    ...current.columns,
-    ...incomingColumns
-      .filter(
-        (incomingColumn) =>
-          !current.columns.some((column) => column.key === incomingColumn.key),
-      )
-      .map<GridColumn>((column) => ({
-        key: column.key,
-        headerName: column.headerName,
-        sourceKey: column.sourceKey,
-      })),
-  ];
-
+  const appendedRows = backfillRows(incomingRows, mergedColumnsBase);
   const columnsChanged = mergedColumnsBase.length !== current.columns.length;
   const mergedRows = [
     ...backfillRows(current.rows, mergedColumnsBase),

@@ -40,6 +40,12 @@ export function useExcelImport() {
     [gridData.columnCount, gridData.rowCount],
   );
 
+  const clearPendingImport = () => {
+    setDialogOpen(false);
+    setPendingParse(null);
+    setPendingColumns([]);
+  };
+
   const handleFileChange = (file: File | null) => {
     setSelectedFile(file);
     setWarningMessage(null);
@@ -147,9 +153,7 @@ export function useExcelImport() {
       gridData.applyImportBatch(importResult);
     });
 
-    setDialogOpen(false);
-    setPendingParse(null);
-    setPendingColumns([]);
+    clearPendingImport();
     setStatus({
       tone: "success",
       title: "Import complete",
@@ -158,9 +162,7 @@ export function useExcelImport() {
   };
 
   const cancelImport = () => {
-    setDialogOpen(false);
-    setPendingParse(null);
-    setPendingColumns([]);
+    clearPendingImport();
     setStatus({
       tone: "default",
       title: "Import canceled",
