@@ -77,6 +77,118 @@ img { display: block; }
 }
 .marquee-track:hover { animation-play-state: paused; }
 
+@keyframes progress-shimmer {
+  from { background-position: 0% 50%; }
+  to { background-position: 200% 50%; }
+}
+
+@keyframes data-stream {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
+
+.progress-shimmer {
+  background-image: linear-gradient(90deg, #2f8f6b, #5fa9b8, #2f8f6b);
+  background-size: 200% 100%;
+  animation: progress-shimmer 3.4s ease-in-out infinite;
+}
+
+.data-stream {
+  will-change: transform;
+  animation: data-stream 18s linear infinite;
+}
+
+.brand-noise {
+  z-index: 0;
+  opacity: 0.045;
+  background-image:
+    linear-gradient(rgba(28, 25, 23, 0.82) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(28, 25, 23, 0.82) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.brand-grid {
+  background-image:
+    linear-gradient(rgba(247, 243, 234, 0.68) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(247, 243, 234, 0.68) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+
+.brand-panel {
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.92), transparent 26%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(247, 243, 234, 0.72));
+}
+
+.dataflow-mark {
+  --mark-ink: #1c1917;
+  --mark-signal: #2f8f6b;
+  --mark-cyan: #5fa9b8;
+  position: relative;
+  display: inline-grid;
+  width: 38px;
+  height: 28px;
+  grid-template-columns: 1fr 16px;
+  align-items: center;
+  gap: 2px;
+  color: var(--mark-ink);
+}
+
+.dataflow-mark--inverted {
+  --mark-ink: #f7f3ea;
+}
+
+.dataflow-mark__lanes {
+  display: grid;
+  gap: 4px;
+}
+
+.dataflow-mark__lanes span {
+  display: block;
+  height: 5px;
+  border-radius: 999px 0 0 999px;
+  background: var(--mark-ink);
+}
+
+.dataflow-mark__lanes span:nth-child(1) {
+  width: 26px;
+}
+
+.dataflow-mark__lanes span:nth-child(2) {
+  width: 31px;
+}
+
+.dataflow-mark__lanes span:nth-child(3) {
+  width: 24px;
+}
+
+.dataflow-mark__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 7px);
+  grid-template-rows: repeat(2, 7px);
+  gap: 2px;
+}
+
+.dataflow-mark__grid span {
+  display: block;
+  border-radius: 1px;
+  background: var(--mark-signal);
+}
+
+.dataflow-mark__grid span:nth-child(even) {
+  background: var(--mark-cyan);
+}
+
+.dataflow-mark::after {
+  position: absolute;
+  inset: 1px 12px 1px auto;
+  width: 13px;
+  border: 5px solid var(--mark-ink);
+  border-left: 0;
+  border-radius: 0 999px 999px 0;
+  content: "";
+}
+
 /* ─── Bento card hover ─────────────────────────────────────────── */
 .bento-card {
   border: 1px solid var(--border);
