@@ -8,8 +8,6 @@ import {
 } from "@ag-grid-community/client-side-row-model";
 import { ModuleRegistry } from "@ag-grid-community/core";
 import { AgGridReact } from "@ag-grid-community/react";
-import type { GridApi, GridReadyEvent } from "@ag-grid-community/core";
-import { useEffect, useRef } from "react";
 
 import { EmptyTableState } from "@/components/table/empty-table-state";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,33 +33,10 @@ export function DataGrid({
   title,
   columns,
   rows,
-  appendedRows = [],
-  replaceVersion = 0,
   loading = false,
   emptyTitle,
   emptyDescription,
 }: DataGridProps) {
-  const apiRef = useRef<GridApi<DataRow> | null>(null);
-
-  useEffect(() => {
-    if (apiRef.current) {
-      apiRef.current.setGridOption("rowData", rows);
-    }
-  }, [replaceVersion, rows]);
-
-  useEffect(() => {
-    if (!apiRef.current || appendedRows.length === 0) {
-      return;
-    }
-
-    apiRef.current.applyTransactionAsync({ add: appendedRows });
-  }, [appendedRows]);
-
-  const handleGridReady = (event: GridReadyEvent<DataRow>) => {
-    apiRef.current = event.api;
-    event.api.setGridOption("rowData", rows);
-  };
-
   if (loading) {
     return (
       <Card>
@@ -89,8 +64,7 @@ export function DataGrid({
         <div className="ag-theme-quartz h-[620px] w-full overflow-hidden rounded-2xl border border-stone-200">
           <AgGridReact<DataRow>
             columnDefs={buildColumnDefinitions(columns)}
-            rowData={[]}
-            onGridReady={handleGridReady}
+            rowData={rows}
             {...baseGridOptions}
           />
         </div>
