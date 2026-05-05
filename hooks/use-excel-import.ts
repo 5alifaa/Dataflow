@@ -97,7 +97,9 @@ export function useExcelImport() {
 
       setWarningMessage(rowCheck.warning ? rowCheck.message : null);
       setPendingParse(parseResult);
-      setPendingColumns(buildColumnSelection(parseResult.columns));
+      setPendingColumns(
+        buildColumnSelection(parseResult.columns, gridData.dataset.columns),
+      );
       setDialogRevision((revision) => revision + 1);
       setDialogOpen(true);
       setStatus({

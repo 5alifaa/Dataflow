@@ -14,6 +14,14 @@ export function slugifyLabel(value: string) {
     .replace(/_{2,}/g, "_");
 }
 
+export function normalizeColumnIdentity(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ");
+}
+
 export function titleCaseLabel(value: string) {
   return value
     .replace(/[_-]+/g, " ")

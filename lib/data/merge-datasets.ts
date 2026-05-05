@@ -5,7 +5,11 @@ import type {
   GridDataset,
   ImportBatchResult,
 } from "@/lib/types";
-import { slugifyLabel, titleCaseLabel } from "@/lib/utils";
+import {
+  normalizeColumnIdentity,
+  slugifyLabel,
+  titleCaseLabel,
+} from "@/lib/utils";
 import { detectImageColumns } from "./detect-image-columns";
 
 interface PreparedIncomingColumn {
@@ -36,10 +40,19 @@ function prepareIncomingColumns(
   return selections
     .filter((selection) => selection.selected)
     .map<PreparedIncomingColumn>((selection) => {
+      const normalizedSourceKey = normalizeColumnIdentity(selection.sourceKey);
+      const normalizedDisplayName = normalizeColumnIdentity(
+        selection.displayName || selection.sourceKey,
+      );
       const existingMatch = existingColumns.find(
         (column) =>
-          column.sourceKey === selection.sourceKey &&
-          column.headerName === selection.displayName,
+          (normalizedSourceKey.length > 0 &&
+            (normalizeColumnIdentity(column.sourceKey ?? "") ===
+              normalizedSourceKey ||
+              normalizeColumnIdentity(column.headerName) ===
+                normalizedSourceKey)) ||
+          (normalizedDisplayName.length > 0 &&
+            normalizeColumnIdentity(column.headerName) === normalizedDisplayName),
       );
 
       if (existingMatch) {
@@ -47,7 +60,7 @@ function prepareIncomingColumns(
         return {
           key: existingMatch.key,
           headerName: existingMatch.headerName,
-          sourceKey: selection.sourceKey,
+          sourceKey: existingMatch.sourceKey ?? selection.sourceKey,
         };
       }
 

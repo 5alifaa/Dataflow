@@ -1,5 +1,5 @@
-import type { DataRow, PrimitiveCell } from "@/lib/types";
-import { isNonEmptyString } from "@/lib/utils";
+import type { DataRow, GridColumn, PrimitiveCell } from "@/lib/types";
+import { isNonEmptyString, normalizeColumnIdentity } from "@/lib/utils";
 
 function normalizePrimitive(value: unknown): PrimitiveCell {
   if (value === undefined || value === null || value === "") {
@@ -43,11 +43,34 @@ export function normalizeParsedRows(
   });
 }
 
-export function buildColumnSelection(columns: string[]) {
-  return columns.map((column) => ({
-    sourceKey: column,
-    originalHeader: column,
-    displayName: isNonEmptyString(column) ? column : "Untitled Column",
-    selected: true,
-  }));
+export function buildColumnSelection(
+  columns: string[],
+  existingColumns: GridColumn[] = [],
+) {
+  return columns.map((column) => {
+    const normalizedSourceKey = normalizeColumnIdentity(column);
+    const existingMatch = existingColumns.find((existingColumn) => {
+      const normalizedHeaderName = normalizeColumnIdentity(
+        existingColumn.headerName,
+      );
+      const normalizedExistingSourceKey = normalizeColumnIdentity(
+        existingColumn.sourceKey ?? "",
+      );
+
+      return (
+        normalizedSourceKey.length > 0 &&
+        (normalizedSourceKey === normalizedHeaderName ||
+          normalizedSourceKey === normalizedExistingSourceKey)
+      );
+    });
+
+    return {
+      sourceKey: column,
+      originalHeader: column,
+      displayName:
+        existingMatch?.headerName ??
+        (isNonEmptyString(column) ? column : "Untitled Column"),
+      selected: true,
+    };
+  });
 }
