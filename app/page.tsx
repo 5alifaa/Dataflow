@@ -178,7 +178,7 @@ export default function HomePage() {
           </div>
           <Link
             href="/import"
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-stone-950 px-4 text-sm font-semibold text-white transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-stone-950 px-4 text-sm font-semibold !text-white transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
           >
             Start
             <ArrowRight className="size-4" weight="bold" />
@@ -205,7 +205,7 @@ export default function HomePage() {
         <div className="hero-reveal mt-10 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/import"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-stone-950 px-6 text-sm font-semibold text-white shadow-[0_18px_50px_rgba(28,25,23,0.18)] transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-stone-950 px-6 text-sm font-semibold !text-white shadow-[0_18px_50px_rgba(28,25,23,0.18)] transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
           >
             Import workbook
             <ArrowRight className="size-4" weight="bold" />
@@ -368,7 +368,7 @@ export default function HomePage() {
           <div className="flex flex-wrap gap-3 md:justify-end">
             <Link
               href="/import"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-stone-950 transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-semibold !text-stone-950 transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
             >
               Import workbook
               <ArrowRight className="size-4" weight="bold" />
