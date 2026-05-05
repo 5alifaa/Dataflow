@@ -4,13 +4,13 @@ import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full px-3 py-1 text-xs font-medium",
+  "inline-flex items-center rounded-full px-3 py-1 text-[0.6875rem] font-semibold uppercase tracking-[0.06em]",
   {
     variants: {
       variant: {
         default: "bg-stone-100 text-stone-700",
-        success: "bg-emerald-100 text-emerald-800",
-        warning: "bg-amber-100 text-amber-900",
+        success: "bg-[#edf3ec] text-[#346538]",
+        warning: "bg-[#fbf3db] text-[#956400]",
       },
     },
     defaultVariants: {

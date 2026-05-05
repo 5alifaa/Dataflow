@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { ImageOff } from "lucide-react";
+import { ImageBroken } from "@phosphor-icons/react";
 import { useState } from "react";
 
 import { IMAGE_THUMBNAIL_SIZE } from "@/lib/constants";
@@ -18,7 +18,7 @@ export function ImageThumbnailCell({ value }: ImageThumbnailCellProps) {
     return (
       <div className="flex h-full items-center">
         <div className="flex items-center gap-2 rounded-xl border border-dashed border-stone-200 bg-stone-50 px-2 py-1 text-xs text-stone-500">
-          <ImageOff className="size-3.5" />
+          <ImageBroken className="size-3.5" weight="bold" />
           Placeholder
         </div>
       </div>
@@ -34,7 +34,7 @@ export function ImageThumbnailCell({ value }: ImageThumbnailCellProps) {
         width={IMAGE_THUMBNAIL_SIZE}
         height={IMAGE_THUMBNAIL_SIZE}
         className={cn(
-          "rounded-xl border border-stone-200 bg-stone-100 object-cover shadow-sm",
+          "rounded-lg border border-stone-200 bg-stone-100 object-cover",
         )}
         onError={() => setFailed(true)}
       />

@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { Component } from "react";
-import { RefreshCw, ShieldAlert } from "lucide-react";
+import { ArrowClockwise, ShieldWarning } from "@phosphor-icons/react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,7 +37,7 @@ export class ErrorBoundary extends Component<
         <Card className="border-rose-200">
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
-              <ShieldAlert className="size-5 text-rose-600" />
+              <ShieldWarning className="size-5 text-rose-700" weight="fill" />
               Something went wrong in the data view
             </CardTitle>
           </CardHeader>
@@ -47,7 +47,7 @@ export class ErrorBoundary extends Component<
               unexpected rendering problem.
             </p>
             <Button onClick={this.handleReset} variant="secondary">
-              <RefreshCw className="size-4" />
+              <ArrowClockwise className="size-4" weight="bold" />
               Retry view
             </Button>
           </CardContent>

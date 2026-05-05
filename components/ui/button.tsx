@@ -5,24 +5,24 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[background-color,border-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-950 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
-          "bg-sky-600 text-white shadow-sm hover:bg-sky-500 active:bg-sky-700",
+          "border border-stone-950 bg-stone-950 text-white hover:bg-stone-800",
         secondary:
-          "bg-stone-100 text-stone-900 hover:bg-stone-200 active:bg-stone-300",
+          "border border-stone-200 bg-stone-100 text-stone-900 hover:bg-stone-200",
         outline:
           "border border-stone-200 bg-white text-stone-900 hover:bg-stone-50",
         ghost: "text-stone-700 hover:bg-stone-100",
-        destructive: "bg-rose-600 text-white hover:bg-rose-500",
+        destructive: "border border-rose-900 bg-rose-900 text-white hover:bg-rose-800",
       },
       size: {
-        default: "h-11 px-4 py-2",
-        sm: "h-9 rounded-lg px-3",
-        lg: "h-12 px-5 text-base",
-        icon: "size-10",
+        default: "px-4 py-2",
+        sm: "min-h-9 px-3 text-xs",
+        lg: "min-h-12 px-5 text-base",
+        icon: "size-11 p-0",
       },
     },
     defaultVariants: {
@@ -34,7 +34,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
 

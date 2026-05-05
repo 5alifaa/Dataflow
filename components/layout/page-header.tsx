@@ -1,6 +1,8 @@
+"use client";
+
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "@phosphor-icons/react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,34 +25,34 @@ export function PageHeader({
   actions,
 }: PageHeaderProps) {
   return (
-    <header className="flex flex-col gap-5 rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.45)] backdrop-blur lg:flex-row lg:items-end lg:justify-between">
-      <div className="space-y-3">
+    <header className="grid gap-6 border-b border-stone-200 pb-8 pt-2 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+      <div className="max-w-4xl space-y-4">
         <div className="flex flex-wrap items-center gap-3">
           {backHref ? (
             <Button asChild variant="ghost" size="sm">
               <Link href={backHref}>
-                <ArrowLeft className="size-4" />
+                <ArrowLeft className="size-4" weight="bold" />
                 Back
               </Link>
             </Button>
           ) : null}
           {eyebrow ? (
-            <span className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-700">
+            <span className="text-xs font-semibold uppercase tracking-[0.24em] text-stone-500">
               {eyebrow}
             </span>
           ) : null}
           {badge ? <Badge>{badge}</Badge> : null}
         </div>
         <div className="space-y-2">
-          <h1 className="text-3xl font-semibold tracking-tight text-stone-950 sm:text-4xl">
+          <h1 className="text-4xl font-semibold tracking-tight text-stone-950 sm:text-5xl">
             {title}
           </h1>
-          <p className="max-w-3xl text-sm leading-7 text-stone-600 sm:text-base">
+          <p className="max-w-3xl text-base leading-7 text-stone-600">
             {description}
           </p>
         </div>
       </div>
-      {actions ? <div className="flex items-center gap-3">{actions}</div> : null}
+      {actions ? <div className="flex flex-wrap items-center gap-3">{actions}</div> : null}
     </header>
   );
 }

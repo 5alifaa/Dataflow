@@ -1,22 +1,19 @@
 "use client";
 
-import "@ag-grid-community/styles/ag-grid.css";
-import "@ag-grid-community/styles/ag-theme-quartz.css";
-
-import {
-  ClientSideRowModelModule,
-} from "@ag-grid-community/client-side-row-model";
-import { ModuleRegistry } from "@ag-grid-community/core";
-import { AgGridReact } from "@ag-grid-community/react";
+import dynamic from "next/dynamic";
 
 import { EmptyTableState } from "@/components/table/empty-table-state";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { buildColumnDefinitions } from "@/lib/grid/column-definitions";
-import { baseGridOptions } from "@/lib/grid/grid-options";
 import type { DataRow, GridColumn } from "@/lib/types";
 
-ModuleRegistry.registerModules([ClientSideRowModelModule]);
+const AgGridView = dynamic(
+  () => import("@/components/table/ag-grid-view").then((mod) => mod.AgGridView),
+  {
+    ssr: false,
+    loading: () => <Skeleton className="h-full w-full" />,
+  },
+);
 
 interface DataGridProps {
   title: string;
@@ -39,11 +36,11 @@ export function DataGrid({
 }: DataGridProps) {
   if (loading) {
     return (
-      <Card>
-        <CardHeader>
+      <Card className="overflow-hidden">
+        <CardHeader className="border-b border-stone-200 bg-[#f9f9f8]">
           <CardTitle>{title}</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 p-6">
           <Skeleton className="h-10 w-full" />
           <Skeleton className="h-[420px] w-full" />
         </CardContent>
@@ -56,17 +53,21 @@ export function DataGrid({
   }
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="overflow-hidden">
+      <CardHeader className="grid gap-3 border-b border-stone-200 bg-[#f9f9f8] sm:grid-cols-[1fr_auto] sm:items-center">
         <CardTitle>{title}</CardTitle>
+        <div className="flex flex-wrap gap-2 text-[0.6875rem] font-semibold uppercase tracking-[0.06em] text-stone-500">
+          <span className="rounded-full bg-white px-3 py-1 ring-1 ring-stone-200">
+            {rows.length.toLocaleString()} rows
+          </span>
+          <span className="rounded-full bg-white px-3 py-1 ring-1 ring-stone-200">
+            {columns.length.toLocaleString()} columns
+          </span>
+        </div>
       </CardHeader>
-      <CardContent>
-        <div className="ag-theme-quartz h-[620px] w-full overflow-hidden rounded-2xl border border-stone-200">
-          <AgGridReact<DataRow>
-            columnDefs={buildColumnDefinitions(columns)}
-            rowData={rows}
-            {...baseGridOptions}
-          />
+      <CardContent className="p-3 sm:p-4">
+        <div className="ag-theme-quartz h-[620px] w-full overflow-hidden rounded-lg border border-stone-200">
+          <AgGridView columns={columns} rows={rows} />
         </div>
       </CardContent>
     </Card>

@@ -1,6 +1,6 @@
 "use client";
 
-import { FileSpreadsheet, LoaderCircle, Upload } from "lucide-react";
+import { FileXls, SpinnerGap, UploadSimple } from "@phosphor-icons/react";
 
 import { ImportStatus } from "@/components/import/import-status";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -29,6 +29,14 @@ interface ExcelImportPanelProps {
   onImport: () => Promise<void>;
 }
 
+function formatFileSize(bytes: number) {
+  if (bytes >= 1024 * 1024) {
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
+
+  return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+}
+
 export function ExcelImportPanel({
   selectedFile,
   status,
@@ -38,16 +46,21 @@ export function ExcelImportPanel({
   onFileChange,
   onImport,
 }: ExcelImportPanelProps) {
+  const hasSelectedFile = Boolean(selectedFile);
+
   return (
-    <Card>
-      <CardHeader className="gap-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+    <Card className="overflow-hidden">
+      <CardHeader className="gap-4 border-b border-stone-200 bg-[#f9f9f8]">
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
           <div className="space-y-1">
             <CardTitle>Excel import</CardTitle>
             <CardDescription>
               Upload a workbook, parse it in a worker, and review the extracted
               columns before the rows are appended.
             </CardDescription>
+            <p className="text-xs uppercase tracking-[0.08em] text-stone-500">
+              Step 1 upload, step 2 map columns, step 3 append rows
+            </p>
           </div>
           <div className="flex flex-wrap gap-2">
             <Badge>{counts.rows.toLocaleString()} rows</Badge>
@@ -55,42 +68,52 @@ export function ExcelImportPanel({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-5">
-        <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
+      <CardContent className="space-y-5 p-6">
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="space-y-3">
             <label
               htmlFor="excel-file"
-              className="text-sm font-medium text-stone-800"
+              className="text-sm font-medium text-stone-900"
             >
               Excel workbook
             </label>
+            <p id="excel-file-hint" className="text-sm text-stone-600">
+              Accepted formats: .xlsx, .xls. Files are parsed locally in your
+              browser worker.
+            </p>
             <Input
               id="excel-file"
               type="file"
               accept=".xlsx,.xls"
+              aria-describedby="excel-file-hint"
               onChange={(event) =>
                 onFileChange(event.target.files?.[0] ?? null)
               }
             />
-            <div className="flex min-h-11 items-center gap-3 rounded-2xl border border-dashed border-stone-200 bg-stone-50 px-4 text-sm text-stone-600">
-              <FileSpreadsheet className="size-4 text-sky-700" />
-              {selectedFile ? selectedFile.name : "No file selected yet"}
+            <div className="flex min-h-12 items-center gap-3 rounded-lg border border-dashed border-stone-200 bg-[#fbfbfa] px-4 text-sm text-stone-600">
+              <FileXls className="size-5 text-[#346538]" weight="duotone" />
+              <span className="truncate" aria-live="polite">
+                {selectedFile
+                  ? `${selectedFile.name} (${formatFileSize(selectedFile.size)})`
+                  : "No file selected yet"}
+              </span>
             </div>
           </div>
           <Button
             size="lg"
             onClick={() => void onImport()}
-            disabled={isParsing}
+            disabled={isParsing || !hasSelectedFile}
             className="min-w-44"
+            aria-busy={isParsing}
           >
             {isParsing ? (
               <>
-                <LoaderCircle className="size-4 animate-spin" />
+                <SpinnerGap className="size-4 animate-spin" weight="bold" />
                 Parsing
               </>
             ) : (
               <>
-                <Upload className="size-4" />
+                <UploadSimple className="size-4" weight="bold" />
                 Import workbook
               </>
             )}

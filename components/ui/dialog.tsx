@@ -1,7 +1,7 @@
 "use client";
 
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
+import { X } from "@phosphor-icons/react";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
@@ -17,7 +17,7 @@ const DialogOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
-    className={cn("fixed inset-0 z-50 bg-stone-950/45 backdrop-blur-sm", className)}
+    className={cn("fixed inset-0 z-50 bg-stone-950/35 backdrop-blur-[2px]", className)}
     {...props}
   />
 ));
@@ -32,14 +32,14 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-[50%] top-[50%] z-50 grid w-[min(92vw,880px)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-3xl border border-stone-200 bg-white p-6 shadow-2xl duration-200",
+        "fixed left-[50%] top-[50%] z-50 grid max-h-[90vh] w-[min(92vw,880px)] translate-x-[-50%] translate-y-[-50%] gap-4 overflow-hidden rounded-xl border border-stone-200 bg-white p-6 shadow-[0_24px_80px_rgba(28,25,23,0.14)] duration-200",
         className,
       )}
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className="absolute right-4 top-4 rounded-full p-2 text-stone-500 transition hover:bg-stone-100 hover:text-stone-900">
-        <X className="size-4" />
+      <DialogPrimitive.Close className="absolute right-4 top-4 flex size-10 cursor-pointer items-center justify-center rounded-md text-stone-500 transition-[background-color,color,transform] hover:bg-stone-100 hover:text-stone-900 active:scale-[0.96]">
+        <X className="size-4" weight="bold" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
