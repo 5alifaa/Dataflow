@@ -1,10 +1,7 @@
 import type { DummyDataResponse } from "@/lib/types";
 
 export async function fetchDummyData() {
-  const response = await fetch("/api/dummy-data", {
-    method: "GET",
-    cache: "no-store",
-  });
+  const response = await fetch("/api/dummy-data");
 
   const data = (await response.json()) as DummyDataResponse;
 
